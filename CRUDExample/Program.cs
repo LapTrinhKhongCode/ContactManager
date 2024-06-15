@@ -3,6 +3,7 @@ using Microsoft.EntityFrameworkCore;
 using ServiceContracts;
 using Services;
 using Serilog;
+using CRUDExample.Filters.ActionsFilter;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -19,7 +20,11 @@ builder.Host.UseSerilog((HostBuilderContext context, IServiceProvider services, 
 	loggerConfiguration.ReadFrom.Configuration(context.Configuration).ReadFrom.Services(services);
 });
 
-builder.Services.AddControllersWithViews();
+builder.Services.AddControllersWithViews(options =>
+{
+	var logger = builder.Services.BuildServiceProvider().GetRequiredService<ILogger<ResponseHeaderActionFilter>>();
+	options.Filters.Add(new ResponseHeaderActionFilter(logger, "KeyGlobal","ValueGlobal",2));
+});
 
 //add services into IoC container
 builder.Services.AddScoped<ICountriesService, CountriesService>();

@@ -4,20 +4,26 @@ using ServiceContracts.DTO;
 
 namespace CRUDExample.Filters.ActionsFilter
 {
-	public class PersonsListActionFilter : IActionFilter
+	public class PersonsListActionFilter : IAsyncActionFilter
 	{
 		private readonly ILogger<PersonsListActionFilter> _logger;	
 		public PersonsListActionFilter(ILogger<PersonsListActionFilter> logger)
 		{
 			_logger = logger;
 		}
-		public void OnActionExecuted(ActionExecutedContext context)
+		public async Task OnActionExecutionAsync(ActionExecutingContext context, ActionExecutionDelegate next)
 		{
-			_logger.LogInformation("OnActionExecuted");
+			_logger.LogInformation("{FiltersName}.{MethodName} method - before",
+				nameof(PersonsListActionFilter), nameof(OnActionExecutionAsync));
+			context.HttpContext.Items["arguments"] = context.ActionArguments;
+			await next();
+			_logger.LogInformation("{FiltersName}.{MethodName} method - after",
+				nameof(PersonsListActionFilter), nameof(OnActionExecutionAsync));
 			PersonsController personsController = (PersonsController)context.Controller;
 			IDictionary<string, object?>? parameters = (IDictionary<string, object?>?)
 				context.HttpContext.Items["arguments"];
-			if (parameters != null) {
+			if (parameters != null)
+			{
 				if (parameters.ContainsKey("searchBy"))
 				{
 					personsController.ViewData["CurrentSearchBy"] = Convert.ToString(parameters["searchBy"]);
@@ -44,14 +50,6 @@ namespace CRUDExample.Filters.ActionsFilter
 					{ nameof(PersonResponse.Address), "Address" }
 				};
 			}
-			
-				
-		}
-
-		public void OnActionExecuting(ActionExecutingContext context)
-		{
-			_logger.LogInformation("OnActionExecuting");
-			context.HttpContext.Items["arguments"] = context.ActionArguments;
 		}
 	}
 }
