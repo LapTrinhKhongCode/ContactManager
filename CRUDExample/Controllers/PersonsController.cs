@@ -1,8 +1,12 @@
-﻿using CRUDExample.Filters.ActionsFilter;
+﻿using CRUDExample.Filters;
+using CRUDExample.Filters.ActionsFilter;
+using CRUDExample.Filters.AuthorizationFilter;
+using CRUDExample.Filters.ExceptionFilter;
 using CRUDExample.Filters.ResourcesFilter;
 using CRUDExample.Filters.ResultFilter;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
+using Rotativa.AspNetCore;
 using ServiceContracts;
 using ServiceContracts.DTO;
 using ServiceContracts.Enums;
@@ -14,6 +18,9 @@ namespace CRUDExample.Controllers
 	{
 		"KeyController", "ValueController", 3
 	}, Order = 3)]
+	[TypeFilter(typeof(HandleExceptionFilter))]
+	[TypeFilter(typeof(PersonAlwaysRunResultFilter))]
+
 	public class PersonsController : Controller
 	{
 		//private fields
@@ -36,6 +43,7 @@ namespace CRUDExample.Controllers
 			"My-Key-FromAction", "My-Value-FromAction", 1
 		}, Order = 1)]
 		[TypeFilter(typeof(PersonListResultFilter))]
+		[SkipFilter]
 		public async Task<IActionResult> Index(string searchBy, string? searchString, string sortBy = nameof(PersonResponse.PersonName), SortOrderOptions sortOrder = SortOrderOptions.ASC)
 		{
 			//Search
@@ -71,6 +79,7 @@ namespace CRUDExample.Controllers
 		[Route("[action]")]
 		[TypeFilter(typeof(PersonCreateAndEditPostActionFilter))]
 		[TypeFilter(typeof(FeatureDisabledResourceFilter), Arguments = new object[] { false })] // true là tắt nút create persons
+
 		public async Task<IActionResult> Create(PersonAddRequest personRequest)
 		{
 			//call the service method
@@ -82,6 +91,7 @@ namespace CRUDExample.Controllers
 
 		[HttpGet]
 		[Route("[action]/{personID}")]
+		[TypeFilter(typeof(TokenResultFilter))]
 		public async Task<IActionResult> Edit(Guid personID)
 		{
 
@@ -109,6 +119,8 @@ namespace CRUDExample.Controllers
 		[HttpPost]
 		[Route("[action]/{personID}")]
 		[TypeFilter(typeof(PersonCreateAndEditPostActionFilter))]
+		[TypeFilter(typeof(TokenAuthorizationFilter))]
+		
 		public async Task<IActionResult> Edit(PersonUpdateRequest personUpdateRequest)
 		{
 			PersonResponse? personResponse = await _personsService.GetPersonByPersonID(personUpdateRequest.PersonID);
@@ -155,6 +167,23 @@ namespace CRUDExample.Controllers
 			}
 			await _personsService.DeletePerson(personResponse.PersonID);
 			return View();
+		}
+
+		[Route("PersonsPDF")]
+		public async Task<IActionResult> PersonsPDF()
+		{
+			List<PersonResponse> persons = await _personsService.GetAllPersons();
+			return new ViewAsPdf("PersonsPDF", persons, ViewData)
+			{
+				PageMargins = new Rotativa.AspNetCore.Options.Margins()
+				{
+					Left = 20,
+					Top = 20,
+					Right = 20,
+					Bottom = 20
+				},
+				PageOrientation = Rotativa.AspNetCore.Options.Orientation.Landscape
+			};
 		}
 	}
 }

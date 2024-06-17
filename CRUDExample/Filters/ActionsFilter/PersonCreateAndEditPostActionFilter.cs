@@ -11,10 +11,13 @@ namespace CRUDExample.Filters.ActionsFilter
 	public class PersonCreateAndEditPostActionFilter : IAsyncActionFilter
 	{
 		private readonly ICountriesService _countriesService;
-		public PersonCreateAndEditPostActionFilter(ICountriesService countriesService)
+		private readonly ILogger _logger;	
+		public PersonCreateAndEditPostActionFilter(ICountriesService countriesService, ILogger<PersonCreateAndEditPostActionFilter> logger)
 		{
 			_countriesService = countriesService;
+			_logger = logger;
 		}
+
 		public async Task OnActionExecutionAsync(ActionExecutingContext context, ActionExecutionDelegate next)
 		{
 			if (context.Controller is PersonsController personsController)
@@ -36,6 +39,7 @@ namespace CRUDExample.Filters.ActionsFilter
 				else await next();
 			}
 			else await next();
+			_logger.LogInformation("After logic");
 		}
 	}
 }
