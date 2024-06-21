@@ -6,9 +6,9 @@ namespace Repositories
 {
     public class CountriesRepository : ICountriesRepository
     {
-        private readonly ICountriesService _db;
+        private readonly ApplicationDbContexts _db;
 
-        public CountriesRepository(ICountriesService db)
+        public CountriesRepository(ApplicationDbContexts db)
         {
             _db = db;
         }

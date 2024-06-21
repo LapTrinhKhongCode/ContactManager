@@ -10,9 +10,9 @@ namespace Repositories
 {
     public class PersonsRepository : IPersonsRepository
     {
-        private readonly ICountriesService _db;
+        private readonly ApplicationDbContexts _db;
 
-        public PersonsRepository(ICountriesService db)
+        public PersonsRepository(ApplicationDbContexts db)
         {
             _db = db;
         }

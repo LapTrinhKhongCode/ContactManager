@@ -23,9 +23,9 @@ namespace CRUDTests
 		//constructor
 		public PersonsServiceTest(ITestOutputHelper testOutputHelper)
 		{
-            _countriesService = new CountriesService(new Entities.ICountriesService(new DbContextOptionsBuilder<Entities.ICountriesService>().Options));
+            _countriesService = new CountriesService(new Entities.ApplicationDbContexts(new DbContextOptionsBuilder<Entities.ApplicationDbContexts>().Options));
 
-            _personService = new PersonsService(new Entities.ICountriesService(new DbContextOptionsBuilder<Entities.ICountriesService>().Options), _countriesService);
+            _personService = new PersonsService(new Entities.ApplicationDbContexts(new DbContextOptionsBuilder<Entities.ApplicationDbContexts>().Options), _countriesService);
 
 			_testOutputHelper = testOutputHelper;
 		}

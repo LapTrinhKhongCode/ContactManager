@@ -39,7 +39,7 @@ builder.Services.AddScoped<IPersonsService, PersonsService>();
 
 
 //thông báo add db sử dụng với sqlserver
-builder.Services.AddDbContext<Entities.ICountriesService>(options =>
+builder.Services.AddDbContext<Entities.ApplicationDbContexts>(options =>
 {
 	options.UseSqlServer(builder.Configuration.GetConnectionString("DefautConnection"));
 });

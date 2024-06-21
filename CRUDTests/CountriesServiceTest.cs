@@ -17,7 +17,7 @@ namespace CRUDTests
 		//constructor
 		public CountriesServiceTest()
 		{
-			var dbContext = new Entities.ICountriesService(new DbContextOptionsBuilder<Entities.ICountriesService>().Options);
+			var dbContext = new Entities.ApplicationDbContexts(new DbContextOptionsBuilder<Entities.ApplicationDbContexts>().Options);
 			_countriesService = new CountriesService(dbContext);
 		}
 
