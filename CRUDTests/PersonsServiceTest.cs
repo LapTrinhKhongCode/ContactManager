@@ -17,15 +17,15 @@ namespace CRUDTests
 	{
 		//private fields
 		private readonly IPersonsService _personService;
-		private readonly ICountriesService _countriesService;
+		private readonly ServiceContracts.ICountriesService _countriesService;
 		private readonly ITestOutputHelper _testOutputHelper;
 
 		//constructor
 		public PersonsServiceTest(ITestOutputHelper testOutputHelper)
-		{			
-			_countriesService = new CountriesService(new PersonsDbContext(new DbContextOptionsBuilder<PersonsDbContext>().Options));
+		{
+            _countriesService = new CountriesService(new Entities.ICountriesService(new DbContextOptionsBuilder<Entities.ICountriesService>().Options));
 
-			_personService = new PersonsService(new PersonsDbContext(new DbContextOptionsBuilder<PersonsDbContext>().Options),_countriesService);
+            _personService = new PersonsService(new Entities.ICountriesService(new DbContextOptionsBuilder<Entities.ICountriesService>().Options), _countriesService);
 
 			_testOutputHelper = testOutputHelper;
 		}

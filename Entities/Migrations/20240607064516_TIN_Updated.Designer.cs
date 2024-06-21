@@ -11,7 +11,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace Entities.Migrations
 {
-    [DbContext(typeof(PersonsDbContext))]
+    [DbContext(typeof(ICountriesService))]
     [Migration("20240607064516_TIN_Updated")]
     partial class TIN_Updated
     {

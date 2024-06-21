@@ -12,12 +12,12 @@ namespace CRUDTests
 {
 	public class CountriesServiceTest
 	{
-		private readonly ICountriesService _countriesService;
+		private readonly ServiceContracts.ICountriesService _countriesService;
 
 		//constructor
 		public CountriesServiceTest()
 		{
-			var dbContext = new PersonsDbContext(new DbContextOptionsBuilder<PersonsDbContext>().Options);
+			var dbContext = new Entities.ICountriesService(new DbContextOptionsBuilder<Entities.ICountriesService>().Options);
 			_countriesService = new CountriesService(dbContext);
 		}
 

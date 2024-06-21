@@ -8,9 +8,9 @@ using System.Threading.Tasks;
 
 namespace Entities
 {
-	public class PersonsDbContext : DbContext
+	public class ICountriesService : DbContext
 	{
-		public PersonsDbContext(DbContextOptions options) : base(options) { }	
+		public ICountriesService(DbContextOptions options) : base(options) { }	
 		public DbSet<Person> Persons { get; set;}
 		public DbSet<Country> Countries { get; set;}
 

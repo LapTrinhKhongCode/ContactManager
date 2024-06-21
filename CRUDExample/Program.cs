@@ -4,6 +4,8 @@ using ServiceContracts;
 using Services;
 using Serilog;
 using CRUDExample.Filters.ActionsFilter;
+using RepositoryContracts;
+using Repositories;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -27,11 +29,17 @@ builder.Services.AddControllersWithViews(options =>
 });
 
 //add services into IoC container
-builder.Services.AddScoped<ICountriesService, CountriesService>();
+
+builder.Services.AddScoped<ICountriesRepository, CountriesRepository>();
+builder.Services.AddScoped<IPersonsRepository, PersonsRepository>()	;
+
+builder.Services.AddScoped<ServiceContracts.ICountriesService, CountriesService>();
 builder.Services.AddScoped<IPersonsService, PersonsService>();
 
+
+
 //thông báo add db sử dụng với sqlserver
-builder.Services.AddDbContext<PersonsDbContext>(options =>
+builder.Services.AddDbContext<Entities.ICountriesService>(options =>
 {
 	options.UseSqlServer(builder.Configuration.GetConnectionString("DefautConnection"));
 });
