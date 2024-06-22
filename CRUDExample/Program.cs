@@ -6,6 +6,7 @@ using Serilog;
 using CRUDExample.Filters.ActionsFilter;
 using RepositoryContracts;
 using Repositories;
+using CRUDExample.StartupExtensions;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -22,28 +23,9 @@ builder.Host.UseSerilog((HostBuilderContext context, IServiceProvider services, 
 	loggerConfiguration.ReadFrom.Configuration(context.Configuration).ReadFrom.Services(services);
 });
 
-builder.Services.AddControllersWithViews(options =>
-{
-	var logger = builder.Services.BuildServiceProvider().GetRequiredService<ILogger<ResponseHeaderActionFilter>>();
-	options.Filters.Add(new ResponseHeaderActionFilter(logger, "KeyGlobal","ValueGlobal",2));
-});
 
-//add services into IoC container
+builder.Services.ConfigureServices(builder.Configuration);
 
-builder.Services.AddScoped<ICountriesRepository, CountriesRepository>();
-builder.Services.AddScoped<IPersonsRepository, PersonsRepository>()	;
-
-builder.Services.AddScoped<ServiceContracts.ICountriesService, CountriesService>();
-builder.Services.AddScoped<IPersonsService, PersonsService>();
-
-
-
-//thông báo add db sử dụng với sqlserver
-builder.Services.AddDbContext<Entities.ApplicationDbContexts>(options =>
-{
-	options.UseSqlServer(builder.Configuration.GetConnectionString("DefautConnection"));
-});
-//Data Source=(localdb)\MSSQLLocalDB;Initial Catalog=PersonsDatabase;Integrated Security=True;Connect Timeout=30;Encrypt=False;Trust Server Certificate=False;Application Intent=ReadWrite;Multi Subnet Failover=False
 var app = builder.Build();
 
 //app.Logger.LogDebug("LogDebug");
