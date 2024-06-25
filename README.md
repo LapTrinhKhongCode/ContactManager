@@ -15,4 +15,11 @@ Edit the following information as you like to be able to run this application, t
 In version 1, I made a simple application to learn aspects of ASP. In this application I use Configuration, xUnit, CRUD operations, Tags helper, Entity framework core, Logging, Serilog, Filter, Repository ...
 
 
+
+
+VERSION 1 WITH N-TIER ARCHITECTURE ![image](https://github.com/LapTrinhKhongCode/ContactManager/assets/120693774/8105e6dd-38cd-45cf-92dc-27a8ba608d23)
+
 SEE VERSION 2 -> https://github.com/LapTrinhKhongCode/ContactsManagerWithCleanArchitecture
+
+
+
